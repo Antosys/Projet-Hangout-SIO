@@ -1,0 +1,43 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply font-pretendard border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-pretendard;
+  }
+}
+
+/* Effet “liquid glass” + glassmorphisme doux */
+.bg-glass {
+  background: rgba(255,255,255,0.86);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  border: 1.5px solid rgba(245, 248, 255, 0.19);
+}
+
+.bg-glass-light {
+  background: rgba(255,255,255,0.99);
+  -webkit-backdrop-filter: blur(27px);
+  backdrop-filter: blur(27px);
+  border: 1.7px solid rgba(242, 245, 255, 0.14);
+}
+
+.rounded-xl {
+  border-radius: 1.2rem !important;
+}
+
+/* Adoucir ombres par défaut */
+.shadow-xl, .shadow-2xl, .shadow {
+  box-shadow: 0 3px 24px 0 rgba(180,200,240,0.10) !important;
+}
+
+/* Désactiver ombres lumineuses vives dans les content boxes */
+.box-no-glow {
+  box-shadow: 0 3px 22px 0 rgba(135,180,220,0.10) !important;
+}
