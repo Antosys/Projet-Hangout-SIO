@@ -2,12 +2,16 @@
 
 Branche mobile du projet Hangout.
 
-Cette branche contient tout le projet (client, server, mobile), mais elle est orientee utilisation mobile via Expo Go.
+Cette branche contient uniquement :
+
+- `server/` (API Node.js/Express + Sequelize)
+- `mobile/HangoutMobile/` (application Expo Go)
 
 ## Prerequis
 
 - Node.js 20+
 - npm
+- PostgreSQL
 - Expo Go sur smartphone (iOS/Android)
 - Meme reseau Wi-Fi pour PC et smartphone
 
@@ -23,9 +27,44 @@ cd ../mobile/HangoutMobile
 npm install
 ```
 
-## 2. Configurer l'API mobile
+## 2. Configurer le serveur (variables d'environnement)
 
-Edite `mobile/HangoutMobile/src/config.js` et mets l'IP locale de ton PC :
+Creer le fichier `server/.env` avec au minimum :
+
+```env
+DB_USERNAME=hangout_user
+DB_PASSWORD=mot_de_passe
+DB_DATABASE=hangout_db
+DB_HOST=127.0.0.1
+DB_PORT=5432
+
+PORT=3000
+
+JWT_SECRET=une_cle_jwt_longue_et_securisee
+JWT_EXPIRES_IN=2h
+
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+```
+
+## 3. Migrer la base de donnees
+
+Depuis `server/` :
+
+```bash
+npx sequelize-cli db:migrate
+```
+
+Commandes utiles :
+
+```bash
+npx sequelize-cli db:migrate:status
+npx sequelize-cli db:migrate:undo
+```
+
+## 4. Configurer l'API mobile
+
+Editer `mobile/HangoutMobile/src/config.js` et mettre l'IP locale du PC :
 
 ```js
 export const API_CONFIG = {
@@ -34,15 +73,15 @@ export const API_CONFIG = {
 };
 ```
 
-Exemple d'IP locale sur Windows :
+Trouver l'IP locale sur Windows :
 
 ```bash
 ipconfig
 ```
 
-Prends l'"Adresse IPv4".
+Prendre la ligne "Adresse IPv4".
 
-## 3. Lancer le backend
+## 5. Lancer le backend
 
 ```bash
 cd server
@@ -51,7 +90,7 @@ node server.js
 
 API disponible sur `http://localhost:3000`.
 
-## 4. Lancer l'application mobile avec Expo Go
+## 6. Lancer l'application mobile avec Expo Go
 
 ```bash
 cd mobile/HangoutMobile
@@ -60,11 +99,11 @@ npx expo start --lan
 
 Puis :
 
-1. Ouvre Expo Go sur le telephone
-2. Scanne le QR code du terminal
+1. Ouvrir Expo Go sur le telephone
+2. Scanner le QR code du terminal
 3. L'application se lance
 
-## Scripts utiles
+## Scripts utiles (mobile)
 
 Dans `mobile/HangoutMobile` :
 
@@ -77,11 +116,11 @@ npm run web
 
 ## Depannage rapide
 
-- Si le telephone ne se connecte pas : verifie que PC + telephone sont sur le meme Wi-Fi.
-- Si l'API ne repond pas : verifie l'IP dans `src/config.js` et que `node server.js` tourne.
-- Si Tunnel pose probleme : prefere `--lan`.
+- Si le telephone ne se connecte pas : verifier que PC + telephone sont sur le meme Wi-Fi.
+- Si l'API ne repond pas : verifier l'IP dans `src/config.js` et que `node server.js` tourne.
+- Si tunnel pose probleme : preferer `--lan`.
 
 ## Notes
 
 - Cette branche est dediee mobile.
-- La branche `main` est la base sans le dossier `mobile/`.
+- La branche `main` ne contient pas le dossier `mobile/`.
