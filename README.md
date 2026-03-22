@@ -7,15 +7,15 @@ Cette branche contient uniquement :
 - `server/` (API Node.js/Express + Sequelize)
 - `mobile/HangoutMobile/` (application Expo Go)
 
-## Prerequis
+## Prérequis
 
 - Node.js 20+
 - npm
 - PostgreSQL
 - Expo Go sur smartphone (iOS/Android)
-- Meme reseau Wi-Fi pour PC et smartphone
+- Même reseau Wi-Fi pour PC et smartphone
 
-## 1. Installer les dependances
+## 1. Installer les dépendances
 
 Depuis la racine :
 
@@ -29,7 +29,7 @@ npm install
 
 ## 2. Configurer le serveur (variables d'environnement)
 
-Creer le fichier `server/.env` avec au minimum :
+Créer le fichier `server/.env` avec au minimum :
 
 ```env
 DB_USERNAME=hangout_user
@@ -47,7 +47,7 @@ STRIPE_SECRET_KEY=sk_test_xxx
 STRIPE_WEBHOOK_SECRET=whsec_xxx
 ```
 
-## 3. Migrer la base de donnees
+## 3. Migrer la base de données
 
 Depuis `server/` :
 
