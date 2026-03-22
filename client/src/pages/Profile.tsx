@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Edit3, Save, X, Mail, Settings, User, LogOut } from "lucide-react";
+import { Edit3, Save, X, Mail, Settings, User, LogOut, Shield } from "lucide-react";
 import Header from "../components/Header";
 import { userService } from "@/services/user.service";
 import { useNavigate } from 'react-router-dom';
@@ -240,6 +240,17 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
+                  {profile.role === 'admin' && (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => navigate('/admin')}
+                      className="w-full bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                    >
+                      <Shield size={16} />
+                      <span>Ouvrir le panel admin</span>
+                    </motion.button>
+                  )}
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}

@@ -17,6 +17,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import CreateEventScreen from '../screens/CreateEventScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import GroupChatScreen from '../screens/GroupChatScreen';
+import AdminPanelScreen from '../screens/AdminPanelScreen';
 
 // Icônes SVG (identiques)
 const CalendarIcon = ({ color, focused }) => (
@@ -86,6 +87,7 @@ const ChatIcon = ({ color, focused }) => (
 // Navigateurs (inchangés)
 const AuthStack = createNativeStackNavigator();
 const AppStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 export const navigationRef = createNavigationContainerRef();
 
@@ -113,6 +115,21 @@ function EventsNavigator() {
       <AppStack.Screen name="EventDetail" component={EventDetailScreen} options={{ title: 'Détail' }} />
       <AppStack.Screen name="Favorites" component={FavoritesScreen} options={{ title: 'Favoris' }} />
     </AppStack.Navigator>
+  );
+}
+
+function ProfileNavigator() {
+  return (
+    <ProfileStack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: '#000000' },
+        headerTitleStyle: { fontWeight: '700', color: '#ffffff' },
+        headerTintColor: '#ffffff',
+      }}
+    >
+      <ProfileStack.Screen name="ProfileHome" component={ProfileScreen} options={{ title: 'Profil' }} />
+      <ProfileStack.Screen name="AdminPanel" component={AdminPanelScreen} options={{ title: 'Panel Admin' }} />
+    </ProfileStack.Navigator>
   );
 }
 
@@ -175,7 +192,7 @@ function AppNavigator() {
       <Tab.Screen name="EventsTab" component={EventsNavigator} options={{ title: 'Événements' }} />
       <Tab.Screen name="Create" component={CreateEventScreen} options={{ title: 'Créer' }} />
       <Tab.Screen name="GroupChats" component={GroupChatScreen} options={{ title: 'Chats' }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profil' }} />
+      <Tab.Screen name="Profile" component={ProfileNavigator} options={{ title: 'Profil', headerShown: false }} />
     </Tab.Navigator>
   );
 }

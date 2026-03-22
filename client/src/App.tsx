@@ -17,6 +17,7 @@ import ModifierEvenement from './pages/ModifierEvenement';
 import SuccessPage from './pages/SuccessPage';
 import CancelPage from './pages/CancelPage';
 import CreerEvenement from './pages/CreerEvenement';
+import AdminPanel from './pages/AdminPanel';
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App: React.FC = () => (
             <Route path="/events/:id" element={<AuthWrapper><EventDetail /></AuthWrapper>} />
             <Route path="/events/edit/:id" element={<AuthWrapper><ModifierEvenement /></AuthWrapper>} />
             <Route path="/profile" element={<AuthWrapper><Profile /></AuthWrapper>} />
+            <Route path="/admin" element={<AuthWrapper><AdminPanel /></AuthWrapper>} />
        
             <Route path="*" element={<NotFound />} />
           </Routes>

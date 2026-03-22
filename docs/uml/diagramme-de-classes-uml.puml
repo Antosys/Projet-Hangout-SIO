@@ -1,0 +1,165 @@
+@startuml
+
+title Hangout - Diagramme UML
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+hide circle
+
+skinparam class {
+  BackgroundColor #F8FBFF
+  BorderColor #2D5C88
+  ArrowColor #2D5C88
+  FontColor #1E3A5F
+}
+
+hide empty members
+
+class User {
+  - id : int
+  - nom : string
+  - prenom : string
+  - username : string
+  - email : string
+  - password_hash : string
+  - role : enum(admin, organisateur, participant)
+  - created_at : datetime
+  --
+  + sInscrire() : void
+  + seConnecter() : Token
+  + modifierProfil() : void
+  + creerEvenement() : Event
+  + rejoindreEvenement() : Inscription
+}
+
+class Event {
+  - id : int
+  - title : string
+  - description : text
+  - date : datetime
+  - price : float
+  - max_people : int
+  - photos : string[]
+  - organizer_id : int (FK)
+  - location_id : int (FK)
+  --
+  + getNbInscrits() : int
+  + estComplet() : boolean
+  + getDetails() : Object
+  + ouvrirGroupChat() : GroupChat
+  + supprimer() : void
+}
+
+class Localisation {
+  - id : int
+  - address : string
+  - city : string
+  - postal_code : string
+  --
+  + getAdresseComplete() : string
+  + estValide() : boolean
+}
+
+class Inscription {
+  - id : int
+  - user_id : int (FK)
+  - event_id : int (FK)
+  - status : string
+  - created_at : datetime
+  --
+  + confirmer() : void
+  + annuler() : void
+  + estConfirmee() : boolean
+}
+
+class Payment {
+  - id : int
+  - user_id : int (FK)
+  - event_id : int (FK)
+  - amount : float
+  - status : string
+  - payment_date : datetime
+  --
+  + initierPaiement() : string
+  + confirmerPaiement() : void
+  + estPaye() : boolean
+}
+
+class GroupChat {
+  - id : int
+  - event_id : int (FK)
+  - created_at : datetime
+  --
+  + ajouterMembre(userId:int) : void
+  + retirerMembre(userId:int) : void
+  + getMessages() : Message[]
+}
+
+class Message {
+  - id : int
+  - groupchat_id : int (FK)
+  - user_id : int (FK)
+  - content : text
+  - created_at : datetime
+  --
+  + publier() : void
+  + modifier(contenu:string) : void
+  + supprimer() : void
+}
+
+class UserGroupChat {
+  - user_id : int (FK)
+  - groupchat_id : int (FK)
+  --
+  + ajouterParticipation() : void
+  + supprimerParticipation() : void
+}
+
+' Boites de verbes (liaisons)
+class "organise" as V_Organise
+class "se déroule à" as V_SeDerouleA 
+class "effectue" as V_Effectue 
+class "reçoit" as V_Recoit 
+class "paie" as V_Paie 
+class "génère" as V_Genere 
+class "ouvre" as V_Ouvre 
+class "contient" as V_Contient 
+class "écrit" as V_Ecrit 
+class "participe via" as V_ParticipeVia
+class "relie via" as V_RelieVia 
+
+' Relations métier via boîtes de verbes
+User "1" -- "0..*" V_Organise
+V_Organise "0..*" -- "1" Event
+
+Event "0..*" -- "1" V_SeDerouleA
+V_SeDerouleA "1" -- "1" Localisation
+
+User "1" -- "0..*" V_Effectue
+V_Effectue "0..*" -- "1" Inscription
+
+Event "1" -- "0..*" V_Recoit
+V_Recoit "0..*" -- "1" Inscription
+
+User "1" -- "0..*" V_Paie
+V_Paie "0..*" -- "1" Payment
+
+Event "1" -- "0..*" V_Genere
+V_Genere "0..*" -- "1" Payment
+
+Event "1" -- "0..1" V_Ouvre
+V_Ouvre "0..1" -- "1" GroupChat
+
+GroupChat "1" -- "0..*" V_Contient
+V_Contient "0..*" -- "1" Message
+
+User "1" -- "0..*" V_Ecrit
+V_Ecrit "0..*" -- "1" Message
+
+User "1" -- "0..*" V_ParticipeVia
+V_ParticipeVia "0..*" -- "1" UserGroupChat
+
+GroupChat "1" -- "0..*" V_RelieVia
+V_RelieVia "0..*" -- "1" UserGroupChat
+@enduml

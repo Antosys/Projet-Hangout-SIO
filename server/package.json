@@ -23,7 +23,9 @@
     "react-dropzone": "^14.3.8",
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.3",
-    "stripe": "^18.2.1"
+    "stripe": "^18.2.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "sequelize-auto-migrations": "^1.0.3"

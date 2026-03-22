@@ -4,7 +4,7 @@ export interface User {
   nom: string;
   prenom: string;
   email?: string;
-  role?: 'user' | 'organisateur' | 'admin';
+  role?: 'participant' | 'organizer' | 'admin';
   createdAt?: Date;
 }
 
@@ -14,6 +14,7 @@ export interface UserProfile {
   nom: string;
   username: string;
   email: string;
+  role?: 'participant' | 'organizer' | 'admin';
   createdAt: Date;
 }
 

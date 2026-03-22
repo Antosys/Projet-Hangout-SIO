@@ -310,6 +310,14 @@ export default function ProfileScreen({ navigation }) {
                   <Text style={styles.menuItemText}>Favoris</Text>
                 </TouchableOpacity>
               </View>
+
+              {profile.role === 'admin' && (
+                <View style={[styles.menuItemBlur, { backgroundColor: 'rgba(0,0,0,0.5)' }]}>
+                  <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('AdminPanel')}>
+                    <Text style={styles.menuItemText}>Panel admin sécurisé</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </Animatable.View>
 
             <Animatable.View animation="fadeInUp" delay={600} duration={600}>

@@ -6,3 +6,4 @@ export { chatService } from './chat.service';
 export { locationService } from './location.service';
 export { uploadService } from './upload.service';
 export { checkoutService } from './checkout.service';
+export { adminService } from './admin.service';

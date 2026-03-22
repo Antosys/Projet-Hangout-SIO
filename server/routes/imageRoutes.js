@@ -5,6 +5,41 @@ const { upload, uploadImage } = require('../controllers/imageController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const rateLowLimitMiddleware = require('../middlewares/rateLowLimitMiddleware');
 
+/**
+ * @swagger
+ * tags:
+ *   - name: Images
+ *     description: Upload d images
+ */
+
+/**
+ * @swagger
+ * /api/images/upload:
+ *   post:
+ *     tags: [Images]
+ *     summary: Televerser une image
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - image
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Image televersee
+ *       400:
+ *         description: Fichier invalide
+ *       401:
+ *         description: Non autorise
+ */
 router.post('/upload', authMiddleware, rateLowLimitMiddleware, (req, res) => {
 	upload.single('image')(req, res, (error) => {
 		if (error instanceof multer.MulterError) {
