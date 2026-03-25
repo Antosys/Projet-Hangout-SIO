@@ -1,5 +1,5 @@
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'https://projet-hangout-sio.onrender.com/api';
 
 export const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
