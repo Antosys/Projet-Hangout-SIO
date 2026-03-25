@@ -40,7 +40,6 @@ Thumbs.db
 venv/
 
 # App-specific generated assets
-server/uploads/
 client/dist/
 mobile/HangoutMobile/dist/
 mobile/HangoutMobile/web-build/
