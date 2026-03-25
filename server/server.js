@@ -10,7 +10,10 @@ require('dotenv').config();
 app.use('/api/events/webhook', require('./routes/stripeWebhook'));
 
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: [
+    'https://hangout-projet-antoinegiblin.netlify.app',
+    'https://antoinegiblin-projet-bts.com'
+  ],
   credentials: true
 }));
 
