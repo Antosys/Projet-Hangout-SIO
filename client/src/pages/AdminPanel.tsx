@@ -125,7 +125,7 @@ const AdminPanel = () => {
     setIsChecking(true);
     setError(null);
     try {
-      const profileRes = await fetch('/api/user/profile', {
+      const profileRes = await fetch('https://projet-hangout-sio.onrender.com/api/user/profile', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
         },
