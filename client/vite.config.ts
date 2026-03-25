@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-const backendTarget = 'http://localhost:5000';
+const backendTarget = 'https://projet-hangout-sio.onrender.com/';
 
 export default defineConfig(({ mode }) => ({
   server: {
