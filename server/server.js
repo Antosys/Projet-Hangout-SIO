@@ -9,8 +9,33 @@ require('dotenv').config();
 
 app.use('/api/events/webhook', require('./routes/stripeWebhook'));
 
+const defaultAllowedOrigins = [
+  'http://localhost:8080',
+  'http://localhost:5173',
+  'https://hangout-projet-antoinegiblin.netlify.app',
+  'https://antoinegiblin-projet-bts.com',
+  'https://projet-hangout-sio.onrender.com'
+];
+
+const allowedOrigins = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsAllowedOrigins = allowedOrigins.length > 0 ? allowedOrigins : defaultAllowedOrigins;
+
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: (origin, callback) => {
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (corsAllowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('CORS origin not allowed'));
+  },
   credentials: true
 }));
 
