@@ -12,7 +12,8 @@ app.use('/api/events/webhook', require('./routes/stripeWebhook'));
 app.use(cors({
   origin: [
     'https://hangout-projet-antoinegiblin.netlify.app',
-    'https://antoinegiblin-projet-bts.com'
+    'https://antoinegiblin-projet-bts.com',
+    'https://www.antoinegiblin-projet-bts.com'
   ],
   credentials: true
 }));
@@ -59,6 +60,59 @@ app.use('/api/admin', adminRoutes);
 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
+  await seedDefaultUsers();
 });
+
+async function seedDefaultUsers() {
+  try {
+    const bcrypt = require('bcrypt');
+    const { User } = require('./models');
+
+    const defaultUsers = [
+      {
+        nom: 'Admin',
+        prenom: 'Hangout',
+        username: 'admin_hangout',
+        email: 'admin@hangout.fr',
+        password: 'admin2026!',
+        role: 'admin',
+      },
+      {
+        nom: 'Organisateur',
+        prenom: 'Hangout',
+        username: 'orga_hangout',
+        email: 'organisateur@hangout.fr',
+        password: 'orga2026!',
+        role: 'organisateur',
+      },
+      {
+        nom: 'Utilisateur',
+        prenom: 'Hangout',
+        username: 'user_hangout',
+        email: 'user@hangout.fr',
+        password: 'user2026!',
+        role: 'participant',
+      },
+    ];
+
+    for (const u of defaultUsers) {
+      const existing = await User.findOne({ where: { email: u.email } });
+      if (!existing) {
+        const password_hash = await bcrypt.hash(u.password, 10);
+        await User.create({
+          nom: u.nom,
+          prenom: u.prenom,
+          username: u.username,
+          email: u.email,
+          password_hash,
+          role: u.role,
+        });
+        console.log(`[Seed] Utilisateur créé : ${u.email} (${u.role})`);
+      }
+    }
+  } catch (err) {
+    console.error('[Seed] Erreur lors de la création des utilisateurs par défaut :', err.message);
+  }
+}
