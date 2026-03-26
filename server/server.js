@@ -7,6 +7,9 @@ const { swaggerUi, swaggerSpec } = require('./config/swagger');
 const app = express();
 require('dotenv').config();
 
+// Render sits behind a reverse proxy and forwards client IPs via X-Forwarded-For.
+app.set('trust proxy', 1);
+
 app.use('/api/events/webhook', require('./routes/stripeWebhook'));
 
 app.use(cors({
@@ -20,7 +23,6 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-        role: 'organisateur',
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api-docs.json', (req, res) => {
