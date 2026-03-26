@@ -16,5 +16,5 @@ export const normalizeUploadFilename = (value?: string | null) => {
 
 export const buildUploadUrl = (value?: string | null) => {
   const filename = normalizeUploadFilename(value);
-  return filename ? `/uploads/${filename}` : null;
+  return filename ? `https://projet-hangout-sio.onrender.com/uploads/${filename}` : null;
 };
