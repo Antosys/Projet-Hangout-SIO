@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-const CLIENT_URL = 'https://antoinegiblin-projet-bts.com/';
+const CLIENT_URL = 'https://antoinegiblin-projet-bts.com';
 
 const createCheckoutSession = async (event, userId, eventId) => {
   const session = await stripe.checkout.sessions.create({
