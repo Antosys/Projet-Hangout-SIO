@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { authService } from "@/services/auth.service";
 
-const logo = "/uploads/0e54e0da-a11b-44ad-b2d5-0da73a96a0d6.webp";
+const logo = "https://projet-hangout-sio.onrender.com/uploads/0e54e0da-a11b-44ad-b2d5-0da73a96a0d6.webp";
 
 const Header = () => {
   const location = useLocation();
