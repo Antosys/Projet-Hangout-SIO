@@ -24,7 +24,7 @@ module.exports = {
       const [usersTotal, adminsTotal, organizersTotal, eventsTotal, inscriptionsTotal, paidPayments] = await Promise.all([
         User.count(),
         User.count({ where: { role: 'admin' } }),
-        User.count({ where: { role: 'organizer' } }),
+        User.count({ where: { role: 'organisateur' } }),
         Event.count(),
         Inscription.count(),
         Payment.count({ where: { status: { [Op.in]: ['paid', 'succeeded', 'confirmed'] } } }),

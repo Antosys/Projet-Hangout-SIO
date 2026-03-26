@@ -20,7 +20,7 @@ type AdminUser = {
   nom: string;
   username: string;
   email: string;
-  role: 'admin' | 'organizer' | 'participant';
+  role: 'admin' | 'organisateur' | 'participant';
   createdAt?: string;
 };
 
@@ -184,7 +184,7 @@ const AdminPanel = () => {
     await loadOverview();
   };
 
-  const handleRoleChange = async (id: number, role: 'admin' | 'organizer' | 'participant') => {
+  const handleRoleChange = async (id: number, role: 'admin' | 'organisateur' | 'participant') => {
     const res = await adminService.updateUserRole(id, role);
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
@@ -372,7 +372,7 @@ const AdminPanel = () => {
                       value={user.role}
                       onChange={async (e) => {
                         try {
-                          await handleRoleChange(user.id, e.target.value as 'admin' | 'organizer' | 'participant');
+                          await handleRoleChange(user.id, e.target.value as 'admin' | 'organisateur' | 'participant');
                         } catch (e: any) {
                           alert(e.message || 'Erreur rôle.');
                         }
@@ -380,7 +380,7 @@ const AdminPanel = () => {
                       className="bg-white border border-blue-100 rounded-xl px-2 py-2"
                     >
                       <option value="participant">participant</option>
-                      <option value="organizer">organisateur</option>
+                      <option value="organisateur">organisateur</option>
                       <option value="admin">admin</option>
                     </select>
                     <button

@@ -7,7 +7,7 @@ export const adminService = {
     return apiRequest(`/admin/users?${params.toString()}`, { method: 'GET' });
   },
 
-  updateUserRole: async (id: number, role: 'admin' | 'organizer' | 'participant'): Promise<Response> => {
+  updateUserRole: async (id: number, role: 'admin' | 'organisateur' | 'participant'): Promise<Response> => {
     return apiRequest(`/admin/users/${id}/role`, {
       method: 'PATCH',
       body: JSON.stringify({ role }),
