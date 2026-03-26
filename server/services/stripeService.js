@@ -1,5 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:8080';
+
 const createCheckoutSession = async (event, userId, eventId) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -14,8 +16,8 @@ const createCheckoutSession = async (event, userId, eventId) => {
       quantity: 1,
     }],
     mode: 'payment',
-    success_url: `http://localhost:8080/achat-reussi?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `http://localhost:8080/achat-annule`,
+    success_url: `${CLIENT_URL}/achat-reussi?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${CLIENT_URL}/achat-annule`,
     client_reference_id: userId,
     metadata: {
       event_id: eventId,

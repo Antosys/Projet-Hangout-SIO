@@ -20,8 +20,14 @@ type AdminUser = {
   nom: string;
   username: string;
   email: string;
-  role: 'admin' | 'organisateur' | 'participant';
+  role: 'admin' | 'organisateur' | 'organizer' | 'participant';
   createdAt?: string;
+};
+
+const normalizeRole = (role: string): 'admin' | 'organisateur' | 'participant' => {
+  if (role === 'organizer') return 'organisateur';
+  if (role === 'admin' || role === 'organisateur' || role === 'participant') return role;
+  return 'participant';
 };
 
 type AdminEvent = {
@@ -185,7 +191,7 @@ const AdminPanel = () => {
   };
 
   const handleRoleChange = async (id: number, role: 'admin' | 'organisateur' | 'participant') => {
-    const res = await adminService.updateUserRole(id, role);
+    const res = await adminService.updateUserRole(id, normalizeRole(role));
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
       throw new Error(data.message || 'Mise à jour du rôle échouée.');
@@ -369,7 +375,7 @@ const AdminPanel = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <select
-                      value={user.role}
+                      value={normalizeRole(user.role)}
                       onChange={async (e) => {
                         try {
                           await handleRoleChange(user.id, e.target.value as 'admin' | 'organisateur' | 'participant');

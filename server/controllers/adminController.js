@@ -122,9 +122,12 @@ module.exports = {
     try {
       const { id } = req.params;
       const { role } = req.body;
+
+      // Normalize 'organizer' (legacy) to 'organisateur'
+      const normalizedRole = role === 'organizer' ? 'organisateur' : role;
       const allowedRoles = ['admin', 'organisateur', 'participant'];
 
-      if (!allowedRoles.includes(role)) {
+      if (!allowedRoles.includes(normalizedRole)) {
         return res.status(400).json({ message: 'Invalid role.' });
       }
 
@@ -133,7 +136,7 @@ module.exports = {
         return res.status(404).json({ message: 'User not found.' });
       }
 
-      user.role = role;
+      user.role = normalizedRole;
       await user.save();
 
       return res.json({
@@ -157,6 +160,7 @@ module.exports = {
       const roleMap = {
         administrateur: 'admin',
         organisateur: 'organisateur',
+        organizer: 'organisateur',
         utilisateur: 'participant',
         admin: 'admin',
         participant: 'participant',
