@@ -50,7 +50,7 @@ const Footer = () => (
     <div className="relative mb-3 flex flex-col items-center">
       <span className="w-16 h-16 rounded-xl overflow-hidden shadow-lg bg-white/60 backdrop-blur-2xl flex items-center justify-center mb-2">
         <img
-          src="/uploads/0e54e0da-a11b-44ad-b2d5-0da73a96a0d6.webp"
+          src="https://projet-hangout-sio.onrender.com/uploads/0e54e0da-a11b-44ad-b2d5-0da73a96a0d6.webp"
           alt="Hangout Logo"
           className="h-10 w-10 opacity-90"
           draggable={false}
