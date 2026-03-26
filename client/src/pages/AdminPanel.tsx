@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import { adminService } from '@/services/admin.service';
 
-type AdminTab = 'overview' | 'users' | 'events' | 'inscriptions';
+type AdminTab = 'overview' | 'users' | 'events' | 'inscriptions' | 'localisations';
 
 type AdminOverview = {
   users: { total: number; admins: number; organizers: number; participants: number };
@@ -58,6 +58,13 @@ const AdminPanel = () => {
   const [usersSearch, setUsersSearch] = useState('');
   const [eventsSearch, setEventsSearch] = useState('');
   const [inscriptionsSearch, setInscriptionsSearch] = useState('');
+
+  const [createUserForm, setCreateUserForm] = useState({ nom: '', prenom: '', username: '', email: '', password: '', role: 'participant' });
+  const [createUserMsg, setCreateUserMsg] = useState<{ type: 'error' | 'success'; text: string } | null>(null);
+
+  const [createLocForm, setCreateLocForm] = useState({ address: '', city: '', postal_code: '' });
+  const [createLocMsg, setCreateLocMsg] = useState<{ type: 'error' | 'success'; text: string } | null>(null);
+
   const hasLoadedOnce = useRef(false);
 
   const parseRateLimitError = async (res: Response, fallback: string) => {
@@ -204,6 +211,34 @@ const AdminPanel = () => {
     await loadOverview();
   };
 
+  const handleCreateUser = async () => {
+    setCreateUserMsg(null);
+    try {
+      const res = await adminService.createUser(createUserForm);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || 'Création utilisateur échouée.');
+      setCreateUserMsg({ type: 'success', text: 'Utilisateur créé avec succès.' });
+      setCreateUserForm({ nom: '', prenom: '', username: '', email: '', password: '', role: 'participant' });
+      await loadUsers();
+      await loadOverview();
+    } catch (e: any) {
+      setCreateUserMsg({ type: 'error', text: e.message || 'Erreur.' });
+    }
+  };
+
+  const handleCreateLocalisation = async () => {
+    setCreateLocMsg(null);
+    try {
+      const res = await adminService.createLocalisation(createLocForm);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || 'Création localisation échouée.');
+      setCreateLocMsg({ type: 'success', text: `Ville "${createLocForm.city}" créée avec succès.` });
+      setCreateLocForm({ address: '', city: '', postal_code: '' });
+    } catch (e: any) {
+      setCreateLocMsg({ type: 'error', text: e.message || 'Erreur.' });
+    }
+  };
+
   if (isChecking) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#e4f1ff] via-white to-[#d8eafd] text-slate-900 flex items-center justify-center">
@@ -244,23 +279,23 @@ const AdminPanel = () => {
               <p className="text-slate-600">Gestion complète des utilisateurs, événements, inscriptions et statistiques.</p>
             </div>
             <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-2 text-sm text-blue-700">
-              {tab === 'overview' ? 'Vue globale' : `${activeRowsCount} éléments affichés`}
+              {tab === 'overview' ? 'Vue globale' : tab === 'localisations' ? 'Créer une ville' : `${activeRowsCount} éléments affichés`}
             </div>
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {['overview', 'users', 'events', 'inscriptions'].map((name) => (
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          {(['overview', 'users', 'events', 'inscriptions', 'localisations'] as AdminTab[]).map((name) => (
             <button
               key={name}
-              onClick={() => setTab(name as AdminTab)}
+              onClick={() => setTab(name)}
               className={`px-4 py-3 rounded-xl border transition ${
                 tab === name
                   ? 'bg-blue-500 border-blue-400 text-white shadow-lg shadow-blue-200/60'
                   : 'bg-white/85 border-white/80 text-slate-700 hover:border-blue-200'
               }`}
             >
-              {name === 'overview' ? 'Statistiques' : name === 'users' ? 'Utilisateurs' : name === 'events' ? 'Événements' : 'Inscriptions'}
+              {name === 'overview' ? 'Statistiques' : name === 'users' ? 'Utilisateurs' : name === 'events' ? 'Événements' : name === 'inscriptions' ? 'Inscriptions' : 'Villes'}
             </button>
           ))}
         </div>
@@ -297,6 +332,25 @@ const AdminPanel = () => {
 
         {tab === 'users' && (
           <section className="space-y-4">
+            <div className="rounded-2xl border border-blue-100 bg-white/90 backdrop-blur-xl p-4 space-y-3 shadow-[0_8px_28px_rgba(120,170,215,0.10)]">
+              <h2 className="text-base font-semibold text-slate-800">Créer un utilisateur</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <input value={createUserForm.prenom} onChange={(e) => setCreateUserForm((f) => ({ ...f, prenom: e.target.value }))} placeholder="Prénom" className="rounded-xl bg-white border border-blue-100 px-3 py-2 text-sm" />
+                <input value={createUserForm.nom} onChange={(e) => setCreateUserForm((f) => ({ ...f, nom: e.target.value }))} placeholder="Nom" className="rounded-xl bg-white border border-blue-100 px-3 py-2 text-sm" />
+                <input value={createUserForm.username} onChange={(e) => setCreateUserForm((f) => ({ ...f, username: e.target.value }))} placeholder="Nom d'utilisateur" className="rounded-xl bg-white border border-blue-100 px-3 py-2 text-sm" />
+                <input value={createUserForm.email} onChange={(e) => setCreateUserForm((f) => ({ ...f, email: e.target.value }))} placeholder="Email" type="email" className="rounded-xl bg-white border border-blue-100 px-3 py-2 text-sm" />
+                <input value={createUserForm.password} onChange={(e) => setCreateUserForm((f) => ({ ...f, password: e.target.value }))} placeholder="Mot de passe" type="password" className="rounded-xl bg-white border border-blue-100 px-3 py-2 text-sm" />
+                <select value={createUserForm.role} onChange={(e) => setCreateUserForm((f) => ({ ...f, role: e.target.value }))} className="rounded-xl bg-white border border-blue-100 px-3 py-2 text-sm">
+                  <option value="participant">Participant</option>
+                  <option value="organisateur">Organisateur</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <button onClick={handleCreateUser} className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium">Créer l'utilisateur</button>
+              {createUserMsg && (
+                <p className={`text-sm ${createUserMsg.type === 'success' ? 'text-emerald-600' : 'text-rose-600'}`}>{createUserMsg.text}</p>
+              )}
+            </div>
             <div className="flex gap-2">
               <input
                 value={usersSearch}
@@ -423,6 +477,22 @@ const AdminPanel = () => {
                   </button>
                 </div>
               ))}
+            </div>
+          </section>
+        )}
+        {tab === 'localisations' && (
+          <section className="space-y-4">
+            <div className="rounded-2xl border border-blue-100 bg-white/90 backdrop-blur-xl p-5 space-y-3 shadow-[0_8px_28px_rgba(120,170,215,0.10)]">
+              <h2 className="text-base font-semibold text-slate-800">Créer une ville / localisation</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <input value={createLocForm.address} onChange={(e) => setCreateLocForm((f) => ({ ...f, address: e.target.value }))} placeholder="Adresse" className="rounded-xl bg-white border border-blue-100 px-3 py-2 text-sm" />
+                <input value={createLocForm.city} onChange={(e) => setCreateLocForm((f) => ({ ...f, city: e.target.value }))} placeholder="Ville" className="rounded-xl bg-white border border-blue-100 px-3 py-2 text-sm" />
+                <input value={createLocForm.postal_code} onChange={(e) => setCreateLocForm((f) => ({ ...f, postal_code: e.target.value }))} placeholder="Code postal" className="rounded-xl bg-white border border-blue-100 px-3 py-2 text-sm" />
+              </div>
+              <button onClick={handleCreateLocalisation} className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium">Créer la ville</button>
+              {createLocMsg && (
+                <p className={`text-sm ${createLocMsg.type === 'success' ? 'text-emerald-600' : 'text-rose-600'}`}>{createLocMsg.text}</p>
+              )}
             </div>
           </section>
         )}

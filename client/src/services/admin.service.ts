@@ -33,4 +33,29 @@ export const adminService = {
   deleteInscription: async (id: number): Promise<Response> => {
     return apiRequest(`/admin/inscriptions/${id}`, { method: 'DELETE' });
   },
+
+  createUser: async (data: {
+    nom: string;
+    prenom: string;
+    username: string;
+    email: string;
+    password: string;
+    role: string;
+  }): Promise<Response> => {
+    return apiRequest('/admin/users', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  createLocalisation: async (data: {
+    address: string;
+    city: string;
+    postal_code: string;
+  }): Promise<Response> => {
+    return apiRequest('/admin/localisations', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
 };
