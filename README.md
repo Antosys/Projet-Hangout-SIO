@@ -32,6 +32,9 @@ Le back-end s'alimente à partir de n'importe quel appel API, ce qui veut dire q
 
 Pour tester les différents accès :
 `Email Mot de passe`
+
 Rôle admin : admin@hangout.fr	admin2026!
+
 Rôle organisateur : organisateur@hangout.fr	orga2026!
+
 Rôle utilisateur : user@hangout.fr	user2026!
