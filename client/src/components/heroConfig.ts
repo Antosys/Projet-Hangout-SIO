@@ -3,8 +3,8 @@
 import { Variants } from "framer-motion";
 
 
-export const eventImgDemo = "https://projet-hangout-sio.onrender.com/uploads/bba09e43-94b0-4531-be65-ec517d2aae23.webp";
-export const eventImgDemo2 = "https://projet-hangout-sio.onrender.com/uploads/77012d8d-a695-448c-9e02-673c1090893d.webp";
+export const eventImgDemo = "https://projet-hangout-sio.onrender.com/uploads/bba09e43-94b0-4531-be65-ec517d2aae23.png";
+export const eventImgDemo2 = "https://projet-hangout-sio.onrender.com/uploads/77012d8d-a695-448c-9e02-673c1090893d.png";
 export const customUploadedImg = "https://projet-hangout-sio.onrender.com/uploads/d8ab2d6d-32e5-4b66-9b6d-45d4a8224702.webp";
 export const bgHero = "https://projet-hangout-sio.onrender.com/uploads/8ddeae57-ab25-4cdf-acd1-571d73da393b.webp";
 
