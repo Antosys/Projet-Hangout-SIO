@@ -38,3 +38,7 @@ Rôle admin : admin@hangout.fr	admin2026!
 Rôle organisateur : organisateur@hangout.fr	orga2026!
 
 Rôle utilisateur : user@hangout.fr	user2026!
+
+## 3. Inscription payante
+
+Pour rejoindre un événement payant, vous pouvez utiliser la carte 4242 4242 4242 01/30 150 pour payer et vous inscrire gratuitement. Toute autre carte est refusée par l'environnement Stripe.
