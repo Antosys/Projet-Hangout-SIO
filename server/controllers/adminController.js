@@ -1,5 +1,6 @@
 const { Op, fn, col } = require('sequelize');
 const { User, Event, Inscription, Payment, Localisation } = require('../models');
+const bcrypt = require('bcrypt');
 
 const toPositiveInt = (value, fallback) => {
   const parsed = parseInt(value, 10);
@@ -121,7 +122,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const { role } = req.body;
-      const allowedRoles = ['admin', 'organizer', 'participant'];
+      const allowedRoles = ['admin', 'organisateur', 'participant'];
 
       if (!allowedRoles.includes(role)) {
         return res.status(400).json({ message: 'Invalid role.' });
@@ -147,6 +148,86 @@ module.exports = {
     } catch (error) {
       console.error('Admin update role error:', error);
       return res.status(500).json({ message: 'Server error while updating role.' });
+    }
+  },
+
+  async createUser(req, res) {
+    try {
+      const { nom, prenom, username, email, password, role } = req.body;
+      const roleMap = {
+        administrateur: 'admin',
+        organisateur: 'organisateur',
+        utilisateur: 'participant',
+        admin: 'admin',
+        participant: 'participant',
+      };
+
+      const normalizedRole = roleMap[String(role || '').trim().toLowerCase()];
+
+      if (!nom || !prenom || !username || !email || !password || !normalizedRole) {
+        return res.status(400).json({
+          message: 'Missing or invalid fields. Required: nom, prenom, username, email, password, role.',
+        });
+      }
+
+      const existing = await User.findOne({
+        where: {
+          [Op.or]: [{ email }, { username }],
+        },
+      });
+
+      if (existing) {
+        return res.status(409).json({ message: 'Email or username already exists.' });
+      }
+
+      const password_hash = await bcrypt.hash(password, 10);
+      const user = await User.create({
+        nom,
+        prenom,
+        username,
+        email,
+        password_hash,
+        role: normalizedRole,
+      });
+
+      return res.status(201).json({
+        message: 'User created.',
+        user: {
+          id: user.id,
+          nom: user.nom,
+          prenom: user.prenom,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+        },
+      });
+    } catch (error) {
+      console.error('Admin create user error:', error);
+      return res.status(500).json({ message: 'Server error while creating user.' });
+    }
+  },
+
+  async createLocalisation(req, res) {
+    try {
+      const { address, city, postal_code } = req.body;
+
+      if (!address || !city || !postal_code) {
+        return res.status(400).json({ message: 'Missing required fields: address, city, postal_code.' });
+      }
+
+      const localisation = await Localisation.create({
+        address,
+        city,
+        postal_code,
+      });
+
+      return res.status(201).json({
+        message: 'Localisation created.',
+        localisation,
+      });
+    } catch (error) {
+      console.error('Admin create localisation error:', error);
+      return res.status(500).json({ message: 'Server error while creating localisation.' });
     }
   },
 

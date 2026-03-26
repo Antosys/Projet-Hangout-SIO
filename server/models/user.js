@@ -71,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 'participant',
         validate: {
-          isIn: [['admin', 'organizer', 'participant']],
+          isIn: [['admin', 'organisateur', 'participant']],
         },
       },
     },

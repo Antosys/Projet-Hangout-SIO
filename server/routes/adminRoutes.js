@@ -12,8 +12,11 @@ router.use(sanitizeMiddleware, authMiddleware, roleMiddleware(['admin']));
 router.get('/overview', adminRateLimitMiddleware, adminController.getOverview);
 
 router.get('/users', adminRateLimitMiddleware, adminController.getUsers);
+router.post('/users', rateLimitMiddleware, adminController.createUser);
 router.patch('/users/:id/role', rateLimitMiddleware, adminController.updateUserRole);
 router.delete('/users/:id', rateLimitMiddleware, adminController.deleteUser);
+
+router.post('/localisations', rateLimitMiddleware, adminController.createLocalisation);
 
 router.get('/events', adminRateLimitMiddleware, adminController.getEvents);
 router.delete('/events/:id', rateLimitMiddleware, adminController.deleteEvent);
